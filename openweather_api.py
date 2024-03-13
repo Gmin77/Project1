@@ -5,7 +5,7 @@ import os
 
 def get_weather_data():
     city = "Seoul"
-    api_key = os.getenv('OPENAI_API_KEY')
+    api_key = os.getenv('apikey')
     lang = 'kr'
     api = f'https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&lang={lang}&units=metric'
 

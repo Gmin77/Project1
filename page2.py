@@ -13,7 +13,7 @@ def weather():
     st.write(f'선택한 지역은 : {selected_city_index}')
 
     city = selected_city_index
-    api_key = os.getenv('OPENAI_API_KEY')
+    api_key = os.getenv('apikey')
     lang = 'kr'
     api = f'https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&lang={lang}&units=metric'
 
