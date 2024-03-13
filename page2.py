@@ -1,6 +1,7 @@
 import streamlit as st
 import json
 import requests
+import os
 
 def weather():
 
@@ -12,9 +13,9 @@ def weather():
     st.write(f'선택한 지역은 : {selected_city_index}')
 
     city = selected_city_index
-    apikey = '64d7ed0e91a9fbe556cf96ee9504c295'
+    api_key = os.getenv('OPENAI_API_KEY')
     lang = 'kr'
-    api = f'https://api.openweathermap.org/data/2.5/weather?q={city}&appid={apikey}&lang={lang}&units=metric'
+    api = f'https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&lang={lang}&units=metric'
 
     result = requests.get(api)
     data = json.loads(result.text)
