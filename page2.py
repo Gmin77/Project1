@@ -1,9 +1,11 @@
 import streamlit as st
 import json
 import requests
-from decouple import config
+import os
+from dotenv import load_dotenv
 
 def weather():
+    load_dotenv()
 
     st.title('지역별 기온 및 날씨 정보')
 
@@ -14,7 +16,8 @@ def weather():
 
     city = selected_city_index
     lang = 'kr'
-    apikey = '64d7ed0e91a9fbe556cf96ee9504c295'
+    apikey = os.getenv("OPENWEATHERMAP_API_KEY")
+
     api = f'https://api.openweathermap.org/data/2.5/weather?q={city}&appid={apikey}&lang={lang}&units=metric'
 
     result = requests.get(api)
@@ -26,7 +29,13 @@ def weather():
         st.write(f'City : {city}')
     
     with col2 :
-        st.write(f'City Temperature : {data['main']['temp']} ℃')
+        try:
+            temperature = data['main']['temp']
+            st.write(f'City Temperature : {temperature} ℃')
+        except KeyError:
+            st.error('API 응답에서 기대한 데이터가 없습니다.')
+        except Exception as e:
+            st.error(f'예외가 발생했습니다: {e}')
 
     # with col3 :
     #     st.write(f'City Weather : {data['weather'][0]['main']}')

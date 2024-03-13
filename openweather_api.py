@@ -3,9 +3,13 @@ import json
 import pandas as pd
 import os
 
+from dotenv import load_dotenv
+
 def get_weather_data():
+
+    load_dotenv()
     city = "Seoul"
-    apikey = '64d7ed0e91a9fbe556cf96ee9504c295'
+    apikey = os.getenv("OPENWEATHERMAP_API_KEY")
     lang = 'kr'
     api = f'https://api.openweathermap.org/data/2.5/weather?q={city}&appid={apikey}&lang={lang}&units=metric'
 
