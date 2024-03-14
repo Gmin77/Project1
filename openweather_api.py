@@ -2,24 +2,19 @@ import requests
 import json
 import pandas as pd
 import os
+import streamlit as st
 
 from dotenv import load_dotenv
 
-def get_weather_data():
+def api():
 
-    load_dotenv()
-    city = "Seoul"
-    apikey = os.getenv("OPENWEATHERMAP_API_KEY")
+    selected_city_options = ['Washington', 'Seoul', 'Paris', 'Berlin', 'Roma', 'Tokyo', 'Manila', 'Budapest', 'Genova',
+                                'Beijing', 'Moscow', 'Boston', 'Barcelona', 'Shanghai', 'Sydney', 'Amsterdam', 'Prague']
+    selected_city_index = st.selectbox('지역을 선택하세요', selected_city_options)
+
+    st.write(f'선택한 지역은 : {selected_city_index}')
+    city = selected_city_index
     lang = 'kr'
-    api = f'https://api.openweathermap.org/data/2.5/weather?q={city}&appid={apikey}&lang={lang}&units=metric'
+    apikey = os.getenv("OPENWEATHERMAP_API_KEY")
 
-    result = requests.get(api)
-    data = json.loads(result.text)
-
-    print(data)
-
-    df = pd.DataFrame(data['list'])
-    df['dt'] = pd.to_datetime(df['dt'], unit='s')
-    df.set_index('dt', inplace=True)
-
-    return df
+    api = f'https://api.openweathermap.org/data/2.5/weather?q={city}&appid={apikey}&units=metric'
