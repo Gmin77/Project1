@@ -14,6 +14,7 @@ apikey = os.getenv("OPENWEATHERMAP_API_KEY")
 
 def weather():
     load_dotenv()
+    st.set_option('deprecation.showPyplotGlobalUse', False)
 
     selected_city_options = ['Washington', 'Seoul', 'Paris', 'Berlin', 'Roma', 'Tokyo', 'Manila', 'Budapest', 'Genova',
                             'Beijing', 'Moscow', 'Boston', 'Barcelona', 'Shanghai', 'Sydney', 'Amsterdam', 'Prague']
@@ -75,38 +76,97 @@ def weather():
     print(datas)
 
     dates = []
-    temp_max_value = []
-    temp_min_value = []
+    date_check ={} # 값을 추가해줄 딕셔너리
+    max_temp = {}
+    min_temp = {}
 
     if "list" in datas :
         for forecast in datas['list'] :
             data_string = forecast['dt_txt']
             date_object = datetime.datetime.strptime(data_string, '%Y-%m-%d %H:%M:%S')
-            day_of_week = date_object.strftime('%d')  # 데이 출력
-            print(f'Date: {date_object.date()}, Day: {day_of_week}')
+            day = date_object.strftime('%d')  # day만 출력 
+            # print(f'Date: {date_object.date()}, Day: {day}')
 
+            # if date_object == day :
+            #     date_check[day] = forecast['dt_txt'].index
+            
+            if day not in date_check:
+                date_check[day] = [datas['list'].index(forecast)]
+            else:
+                 date_check[day].append(datas['list'].index(forecast))  #해당 날짜를 구분하여 index의 길이를 측정하여 갯수파악
 
-        timestamp = forecast['dt']
-        date = datetime.datetime.utcfromtimestamp(timestamp).strftime('%Y-%m-%d')
-        temp_max = forecast['main']['temp_max']
-        temp_min = forecast['main']['temp_min']
+        for day, index in date_check.items(): # 딕셔너리 day, index의 값을 출력
+            print(f"Date: {day}, Index: {index}")
 
-        dates.append(date)
-        temp_max_value.append(temp_max)
-        temp_min_value.append(temp_min)
+        date_check1 = list(date_check.items())
+        length = len(date_check1)
 
-    plt.figure(figsize=(8, 5))
-    plt.plot(dates, temp_max_value, label='Max Temperature', marker='*')
-    plt.plot(dates, temp_min_value, label='Min Temperature', marker='*')
+        for i in range(length):
+            key, value = date_check1[i]
+            # print(f"{key}, {value}")
+
+        for key in date_check.keys():
+            values = date_check[key]
+            for idx, value in enumerate(values, start=1):
+                print(f"{int(key)}day: {value}")
+                check_list = datas['list'][value]
+                check_list1 = check_list['main']['temp_min'] #최저온도
+                check_list2 = check_list['main']['temp_max'] #최대온도
+                # print(check_list)
+                # print('최저 온도 :',check_list1,'°C')
+                # print('최대 온도 :',check_list2,'°C')
+                
+                 # 최고온도와 최저온도를 딕셔너리에 저장
+                if key not in max_temp:
+                    max_temp[key] = check_list2
+                elif check_list2 > max_temp[key]:
+                    max_temp[key] = check_list2
+
+                if key not in min_temp:
+                    min_temp[key] = check_list1
+                elif check_list1 < min_temp[key]:
+                    min_temp[key] = check_list1
+
+                print(max_temp)
+                print(min_temp)
+
+        print("최고 온도:")
+        for key, value in max_temp.items():
+            print(f"{key}: {value}°C")
+
+        print("최저 온도:")
+        for key, value in min_temp.items():
+                print(f"{key}: {value}°C")
+                
+
+    df_max = pd.DataFrame(max_temp.items(), columns=['Date', 'Max Temp'])
+    df_min = pd.DataFrame(min_temp.items(), columns=['Date', 'Min Temp'])
+
+    print(df_max)
+    print(df_min)
+
+    plt.figure(figsize=(10, 6))
+    plt.plot(df_max['Date'], df_max['Max Temp'], label='Max Temperature', marker='*')
+    plt.plot(df_min['Date'], df_min['Min Temp'], label='Min Temperature', marker='*')
     plt.xlabel('Date')
     plt.ylabel('Temperature (°C)')
-    plt.title(f'Weekly Temperature Forecast for {city}')
+    plt.title('Weekly Temperature Forecast')
     plt.xticks(rotation=45)
     plt.legend()
     plt.tight_layout()
 
     # plt.show() 대신에 st.pyplot() 사용
     st.pyplot()
+
+    # fig, ax = plt.subplots()
+    # df_max.plot(ax=ax)
+    # df_min.plot(ax=ax)
+    # ax.set_xlabel('날짜')
+    # ax.set_ylabel('온도')
+    # ax.set_title('최고 및 최저 온도 추이')
+
+    # st.pyplot(fig)
+
     # df = pd.DataFrame({
     #     'Date': dates,
     #     'Max Temperature': temp_max_value,
