@@ -1,13 +1,8 @@
 import streamlit as st
-import json
-import requests
-import os
+import json, os, requests, datetime, folium
 from dotenv import load_dotenv
-import datetime
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import pandas as pd
-import folium
 from streamlit_folium import folium_static
 
 lang = 'kr'
@@ -18,7 +13,6 @@ def weather():
     st.set_option('deprecation.showPyplotGlobalUse', False)
 
     st.title('지역별 기온 및 날씨 정보')
-    print(f"Folium version: {folium.__version__}")
 
     selected_city_options = ['Seoul', 'Paris', 'Berlin', 'Roma', 'Tokyo', 'Manila', 'Budapest', 'Genova',
                             'Beijing', 'Moscow', 'Boston', 'Barcelona', 'Shanghai', 'Sydney', 'Amsterdam', 'Prague']
@@ -33,6 +27,7 @@ def weather():
     result = requests.get(api)
     data = json.loads(result.text)
 
+    #json파일 'main', 'weather'내 데이터 뽑기
     if 'main' in data and 'weather' in data:
         location = data['name']
         temperature = data['main']['temp']
