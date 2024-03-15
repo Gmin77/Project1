@@ -7,16 +7,20 @@ import datetime
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import pandas as pd
+import folium
+from streamlit_folium import folium_static
 
 lang = 'kr'
 apikey = os.getenv("OPENWEATHERMAP_API_KEY")
-
 
 def weather():
     load_dotenv()
     st.set_option('deprecation.showPyplotGlobalUse', False)
 
-    selected_city_options = ['Washington', 'Seoul', 'Paris', 'Berlin', 'Roma', 'Tokyo', 'Manila', 'Budapest', 'Genova',
+    st.title('지역별 기온 및 날씨 정보')
+    print(f"Folium version: {folium.__version__}")
+
+    selected_city_options = ['Seoul', 'Paris', 'Berlin', 'Roma', 'Tokyo', 'Manila', 'Budapest', 'Genova',
                             'Beijing', 'Moscow', 'Boston', 'Barcelona', 'Shanghai', 'Sydney', 'Amsterdam', 'Prague']
     selected_city_index = st.selectbox('Select City', selected_city_options)
 
@@ -26,10 +30,20 @@ def weather():
     api = f'https://api.openweathermap.org/data/2.5/weather?q={city}&appid={apikey}&units=metric'
     # st.set_option('deprecation.showPyplotGlobalUse', False)
 
-    st.title('지역별 기온 및 날씨 정보')
-
     result = requests.get(api)
     data = json.loads(result.text)
+
+    if 'main' in data and 'weather' in data:
+        location = data['name']
+        temperature = data['main']['temp']
+        weather_status = data['weather'][0]['main']
+
+        # Folium을 사용하여 지도에 위치 표시하기
+        m = folium.Map(location=[data['coord']['lat'], data['coord']['lon']], zoom_start=10)
+        folium.Marker(location=[data['coord']['lat'], data['coord']['lon']], popup=f'{location}: {temperature}℃, {weather_status}').add_to(m)
+        print(folium_static(m))
+    else:
+        st.write('City not found')
 
     col1, col2 = st.columns(2) # 2,2 형태로 계속 출력
     col3, col4 = st.columns(2)
