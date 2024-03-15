@@ -18,9 +18,9 @@ def weather():
 
     selected_city_options = ['Washington', 'Seoul', 'Paris', 'Berlin', 'Roma', 'Tokyo', 'Manila', 'Budapest', 'Genova',
                             'Beijing', 'Moscow', 'Boston', 'Barcelona', 'Shanghai', 'Sydney', 'Amsterdam', 'Prague']
-    selected_city_index = st.selectbox('지역을 선택하세요', selected_city_options)
+    selected_city_index = st.selectbox('Select City', selected_city_options)
 
-    st.write(f'선택한 지역은 : {selected_city_index}')
+    st.write(f'Choose City : {selected_city_index}')
 
     city = selected_city_index
     api = f'https://api.openweathermap.org/data/2.5/weather?q={city}&appid={apikey}&units=metric'
@@ -48,10 +48,10 @@ def weather():
             st.error(f'예외가 발생했습니다: {e}')
 
     with col3 :
-        st.write(f'temp_min : {data['main']['temp_min']} ℃')
+        st.write(f'Lowest Temperature : {data['main']['temp_min']} ℃')
        
     with col4 :
-        st.write(f'temp_max : {data['main']['temp_max']} ℃')
+        st.write(f'Highest Temperature : {data['main']['temp_max']} ℃')
 
     with col5 :
         st.write(f'Weather : {data['weather'][0]['main']}')
