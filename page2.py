@@ -14,7 +14,7 @@ def weather():
 
     st.title('지역별 기온 및 날씨 정보')
 
-    selected_city_options = ['Seoul', 'Paris', 'Berlin', 'Roma', 'Tokyo', 'Manila', 'Budapest', 'Genova',
+    selected_city_options = ['Seoul', 'Busan', 'Paris', 'Berlin', 'Roma', 'Tokyo', 'Manila', 'Budapest', 'Genova',
                             'Beijing', 'Moscow', 'Boston', 'Barcelona', 'Shanghai', 'Sydney', 'Amsterdam', 'Prague']
     selected_city_index = st.selectbox('Select City', selected_city_options)
 
@@ -99,16 +99,18 @@ def weather():
             # if date_object == day :
             #     date_check[day] = forecast['dt_txt'].index
             
+            #해당 날짜를 구분하여 index의 길이를 측정하여 갯수파악
             if day not in date_check:
                 date_check[day] = [datas['list'].index(forecast)]
             else:
-                 date_check[day].append(datas['list'].index(forecast))  #해당 날짜를 구분하여 index의 길이를 측정하여 갯수파악
+                date_check[day].append(datas['list'].index(forecast))
 
         for day, index in date_check.items(): # 딕셔너리 day, index의 값을 출력
             print(f"Date: {day}, Index: {index}")
 
         date_check1 = list(date_check.items())
         length = len(date_check1)
+        print(date_check1)
 
         for i in range(length):
             key, value = date_check1[i]
