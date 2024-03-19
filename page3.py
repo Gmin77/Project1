@@ -1,7 +1,8 @@
 import streamlit as st
 import time
+import pandas as pd
 
-# def db():
-#     for word in _TEXT_.split(" "):
-#         yield word + " "
-#         time.sleep(0.03)
+@st.cache_data
+def load_data():
+    data = pd.read_csv("record_data.csv")
+    st.dataframe(data)

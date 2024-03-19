@@ -92,7 +92,6 @@ def weather():
 
     print(datas)
 
-    dates = []
     data_to_write = []
     date_check ={} # 값을 추가해줄 딕셔너리
     max_temp = {}
@@ -150,13 +149,16 @@ def weather():
 
                 print(max_temp)
                 print(min_temp)
+                
         for key, values in date_check.items():
             for value in values:
+                city = selected_city_index
                 check_list = datas['list'][value]
                 day = check_list['dt_txt'].split()[0]  # 날짜
+                day_time = check_list['dt_txt'].split()[1]
                 temp_max = check_list['main']['temp_max']  # 최고 온도
                 temp_min = check_list['main']['temp_min']  # 최저 온도
-                data_to_write.append([day, temp_max, temp_min])
+                data_to_write.append([city, temp_max, temp_min, day, day_time])
 
         # CSV 파일에 데이터 쓰기
         filename = 'record_data.csv'
@@ -191,66 +193,4 @@ def weather():
     # plt.show() 대신에 st.pyplot() 사용
     st.pyplot()
 
-    # with open(filename, mode='w', newline='') as file:
-        
-    #     writer = csv.writer(file)
-    #     writer.writerow(['Date', 'Min Temperature', 'Max Temperature'])  # 헤더 쓰기
-
-    #     for key,value in max_temp.items():
-    #         min_temp_vals = min_temp.get(key, 0)
-    #         max_temp_vals = max_temp.get(key, 0)
-
-    #         for min_temp_val, max_temp_val in zip(min_temp_vals, max_temp_vals):
-    #             writer.writerow([key, min_temp_val, max_temp_val])
-       
-    #     filename = 'weather_data.csv'
-
-    # def write_csv(writer_data, filename) :
-    #     with open(filename, mode='w', newline='') as file:
-    #         writer = csv.writer(file)
-    #         for row in writer_data :
-    #             writer.writerow(row)
-
-    #             writer_data = [
-    #                 ['도시이름', '날짜', '최저온도', '최고온도', 'dt_txt'],
-    #                 [city, key, values, value, check_list3],
-    #             ]
-    
-    #         filename = 'record_data.csv'
-    #         write_csv(writer_data, filename)
-
-        # writer_data = []
-        # for forecast in datas['list']:
-        #     # 예측 데이터에서 날짜 및 시간, 최저 온도, 최고 온도를 추출
-        #     date_time = forecast['dt_txt']
-        #     date = date_time.split()[0]  # 날짜만 추출
-        #     min_temp_val = forecast['main']['temp_min']
-        #     max_temp_val = forecast['main']['temp_max']
-            
-        #     # 도시 이름, 날짜, 최저 온도, 최고 온도를 데이터에 추가
-        #     writer_data.append([city, date, min_temp_val, max_temp_val, date_time])
-
-        # filename = 'record_data.csv'
-        # write_csv(writer_data, filename)
-    
-    # fig, ax = plt.subplots()
-    # df_max.plot(ax=ax)
-    # df_min.plot(ax=ax)
-    # ax.set_xlabel('날짜')
-    # ax.set_ylabel('온도')
-    # ax.set_title('최고 및 최저 온도 추이')
-
-    # st.pyplot(fig)
-
-    # df = pd.DataFrame({
-    #     'Date': dates,
-    #     'Max Temperature': temp_max_value,
-    #     'Min Temperature': temp_min_value
-    # })
-
-    # # 날짜를 인덱스로 설정
-    # df.set_index('Date', inplace=True)
-
-    # # 바 차트 그리기
-    # st.bar_chart(df)
 

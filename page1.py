@@ -8,7 +8,6 @@ _TEXT_ = """
     """
 
 def home():
-
     for word in _TEXT_.split(" "):
         yield word + " "
         time.sleep(0.03)

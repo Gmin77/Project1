@@ -1,6 +1,6 @@
 from page1 import *
 from page2 import *
-# from page3 import *
+from page3 import *
 import streamlit as st
 
 if 'page' not in st.session_state:
@@ -20,7 +20,7 @@ if st.session_state['page']=='home':
 elif st.session_state['page']=='weather':
     weather()
 elif st.session_state['page']=='db':
-    pass
+    load_data()
 
 
 
