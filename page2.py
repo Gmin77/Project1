@@ -12,7 +12,7 @@ apikey = os.getenv("OPENWEATHERMAP_API_KEY")
 def write_csv(data, filename):
     with open(filename, mode='w', newline='') as file:
         writer = csv.writer(file)
-        writer.writerow(['day', 'temp_max', 'temp_min'])  # 헤더 쓰기
+        writer.writerow(['city', 'temp_min', 'temp_max', 'day'])  # 헤더 쓰기
         writer.writerows(data)
 
 def weather():
@@ -131,7 +131,6 @@ def weather():
                 check_list = datas['list'][value]
                 check_list1 = check_list['main']['temp_min'] #최저온도
                 check_list2 = check_list['main']['temp_max'] #최대온도
-                check_list3 = check_list['dt_txt']
                 # print(check_list)
                 # print('최저 온도 :',check_list1,'°C')
                 # print('최대 온도 :',check_list2,'°C')
@@ -157,7 +156,7 @@ def weather():
             day = check_list['dt_txt'].split()[0]  # 날짜
             temp_max = max_temp[key]  # 최고 온도
             temp_min = min_temp[key]  # 최저 온도
-            data_to_write.append([city, temp_max, temp_min, day])
+            data_to_write.append([city, temp_min, temp_max, day])
 
         # CSV 파일에 데이터 쓰기
         filename = 'record_data.csv'
@@ -173,8 +172,6 @@ def weather():
 
     df_max = pd.DataFrame(max_temp.items(), columns=['Date', 'Max Temp'])
     df_min = pd.DataFrame(min_temp.items(), columns=['Date', 'Min Temp'])
-    df_max1 = max_temp.values()
-    df_min1 = min_temp.values()
    
     print(df_max)
     print(df_min)
