@@ -149,16 +149,15 @@ def weather():
 
                 print(max_temp)
                 print(min_temp)
-                
-        for key, values in date_check.items():
-            for value in values:
-                city = selected_city_index
-                check_list = datas['list'][value]
-                day = check_list['dt_txt'].split()[0]  # 날짜
-                day_time = check_list['dt_txt'].split()[1]
-                temp_max = check_list['main']['temp_max']  # 최고 온도
-                temp_min = check_list['main']['temp_min']  # 최저 온도
-                data_to_write.append([city, temp_max, temp_min, day, day_time])
+
+        # for key, values in date_check.items():
+            # for value in values:
+            city = selected_city_index
+            check_list = datas['list'][value]
+            day = check_list['dt_txt'].split()[0]  # 날짜
+            temp_max = max_temp[key]  # 최고 온도
+            temp_min = min_temp[key]  # 최저 온도
+            data_to_write.append([city, temp_max, temp_min, day])
 
         # CSV 파일에 데이터 쓰기
         filename = 'record_data.csv'
